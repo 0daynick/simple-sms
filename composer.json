@@ -1,0 +1,19 @@
+{
+    "name": "overnic/dm-package",
+    "description": "a dm package",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "overnick",
+            "email": "overnic@httpd.cc"
+        }
+    ],
+    "require": {
+	"php": ">=5.6",
+    	"guzzlehttp/guzzle": "^6.2",
+	"monolog/monolog": "^1.22",
+	"ext-openssl": "*",
+	"pimple/pimple": "^3.0"
+    }
+}
