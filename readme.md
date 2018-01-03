@@ -3,7 +3,7 @@
 ## 安装
 
 ```shell
-composer require "overnic/dm-package:~1.0"
+composer require overnic/dm-package
 ```
 
 ## 配置
