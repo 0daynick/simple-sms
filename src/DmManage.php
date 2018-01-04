@@ -10,6 +10,8 @@ namespace OverNick\Dm;
 
 use Closure;
 use InvalidArgumentException;
+use OverNick\Dm\Client\DmClientAbstract;
+use function PHPSTORM_META\type;
 
 class DmManage
 {
@@ -110,7 +112,7 @@ class DmManage
      */
     public function getDefaultDriver()
     {
-        return $this->app['config']['sms']['default'];
+        return $this->app['config']['sms.default'];
     }
 
     /**
@@ -129,13 +131,10 @@ class DmManage
      *
      * @param  string    $driver
      * @param  \Closure  $callback
-     * @return $this
      */
     public function extend($driver, Closure $callback)
     {
         $this->customCreators[$driver] = $callback->bindTo($this, $this);
-
-        return $this;
     }
 
     /**

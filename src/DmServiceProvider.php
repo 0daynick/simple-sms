@@ -8,25 +8,30 @@
 
 namespace OverNick\Dm;
 
+use InvalidArgumentException;
 use Illuminate\Support\ServiceProvider;
-use OverNick\Dm\Aliyun\Client as AliyunClient;
-use OverNick\Dm\Tencent\TencentClient as TencentClient;
 
 class DmServiceProvider extends ServiceProvider
 {
     public function register()
     {
         $this->app->singleton('sms',function($app){
-            return new DmManage($app);
-        });
 
-        $this->app['sms']->extend('aliyun',function(){
-            return new AliyunClient($this->app['sms']->getConfig('aliyun'));
-        });
+            $dm =  new DmManage($app);
 
-        $this->app['sms']->extend('tencent',function(){
-            return new TencentClient($this->app['sms']->getConfig('tencent'));
-        });
+            $initList = $this->app['config']['sms']['init'];
 
+            if(!is_array($initList) || count($initList) <= 0){
+                throw new InvalidArgumentException('not init drivers');
+            }
+
+            foreach ($initList as $key => $classed){
+                $dm->extend($key,function() use($dm, $key, $classed){
+                    $instance = new \ReflectionClass($classed);
+                    $instance->newInstance($dm->getConfig($key));
+                });
+            }
+
+        });
     }
 }
