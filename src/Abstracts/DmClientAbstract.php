@@ -5,7 +5,7 @@
  * Date: 2018/1/3
  * Time: 16:58
  */
-namespace OverNick\Dm\Client;
+namespace OverNick\Dm\Abstracts;
 
 use GuzzleHttp\Client;
 

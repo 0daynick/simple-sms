@@ -9,6 +9,7 @@
 namespace OverNick\Dm\Client;
 
 use InvalidArgumentException;
+use OverNick\Dm\Abstracts\DmClientAbstract;
 
 class AliyunClient extends DmClientAbstract
 {
