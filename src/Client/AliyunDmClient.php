@@ -10,8 +10,15 @@ namespace OverNick\Dm\Client;
 
 use InvalidArgumentException;
 use OverNick\Dm\Abstracts\DmClientAbstract;
+use OverNick\Dm\Abstracts\DmConfigAbstract;
 
-class AliyunClient extends DmClientAbstract
+/**
+ * 阿里云短信服务
+ *
+ * Class AliyunClient
+ * @package OverNick\Dm\Client
+ */
+class AliyunDmClient extends DmClientAbstract
 {
     /**
      * @var string 阿里云的产品名，不需要跟换
@@ -56,19 +63,28 @@ class AliyunClient extends DmClientAbstract
     protected $dateTimeFormat = 'Y-m-d\TH:i:s\Z';
 
     /**
-     * 校验配置信息
+     * 获取配置信息
+     *
+     * @param $config
+     * @return mixed
      */
-    protected function validateConfig()
+    protected function getConfig($config)
     {
-        if(!isset($this->config['access_key_id']) || !isset($this->config['access_secret'])){
+        if(!isset($config['access_key_id']) || !isset($config['access_secret'])){
             throw new InvalidArgumentException("Configure access_key_id or access_secret not found.");
         }
+
+        return $config;
     }
 
-    /*
-     * 校验参数
+    /**
+     * 获取参数
+     *
+     * @param $to
+     * @param DmConfigAbstract $params
+     * @return DmConfigAbstract
      */
-    protected function validateParams($to,$params)
+    protected function getParams($to, DmConfigAbstract $params)
     {
         if(!(isset($params['tpl']) &&
             isset($params['sign']) &&
@@ -79,7 +95,7 @@ class AliyunClient extends DmClientAbstract
 
         $params['to'] = $to;
 
-        $this->params = $params;
+        return $params;
     }
 
     /**

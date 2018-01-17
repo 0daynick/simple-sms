@@ -10,23 +10,36 @@ namespace OverNick\Dm\Client;
 
 use InvalidArgumentException;
 use OverNick\Dm\Abstracts\DmClientAbstract;
+use OverNick\Dm\Abstracts\DmConfigAbstract;
 
-class TencentClient extends DmClientAbstract
+/**
+ * 腾讯云短信服务
+ *
+ * Class TencentClient
+ * @package OverNick\Dm\Client
+ */
+class TencentDmClient extends DmClientAbstract
 {
     /**
      * 验证初始化参数
      */
-    protected function validateConfig()
+    protected function getConfig($config)
     {
-        if(!isset($this->config['app_id']) || !isset($this->config['app_key'])){
+        if(!isset($config['app_id']) || !isset($config['app_key'])){
             throw new InvalidArgumentException("Configure app_id or app_key not found.");
         }
+
+        return $config;
     }
 
-    /*
-     * 验证传入参数
+    /**
+     * 获取参数
+     *
+     * @param $to
+     * @param DmConfigAbstract $params
+     * @return DmConfigAbstract
      */
-    protected function validateParams($to, $params)
+    protected function getParams($to, DmConfigAbstract $params)
     {
         if(!(isset($params['tpl']) &&
             isset($params['sign']) &&
@@ -37,7 +50,7 @@ class TencentClient extends DmClientAbstract
 
         $params['to'] = $to;
 
-        $this->params = $params;
+        return $params;
     }
 
     /**

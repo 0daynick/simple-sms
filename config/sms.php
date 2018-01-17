@@ -29,10 +29,10 @@ return [
         ]
     ],
     /**
-     * 需要初始化的内容，如果不
+     * 需要初始化的内容，如果不需要自启动，注释即可
      */
     'init' => [
-        'aliyun' => \OverNick\Dm\Client\AliyunClient::class,
-        'tencent' => \OverNick\Dm\Client\TencentClient::class
+        'aliyun' => \OverNick\Dm\Client\AliyunDmClient::class,
+        'tencent' => \OverNick\Dm\Client\TencentDmClient::class
     ]
 ];

@@ -31,42 +31,39 @@ abstract class DmClientAbstract
 
     public function __construct(array $config = [])
     {
-        $this->config = $config;
-
-        $this->validateConfig();
+        $this->config = $this->getConfig($config);
 
         $this->client = new Client();
     }
 
     /**
-     * 检测配置信息
-     *
-     * @return mixed
-     */
-    abstract protected function validateConfig();
-
-    /**
      * 发送短信
      *
      * @param $to
-     * @param array $params
+     * @param DmConfigAbstract $params
      * @return mixed
      */
-    public function send($to,array $params = [])
+    public function send($to,DmConfigAbstract $params)
     {
-        $this->validateParams($to,$params);
+        $this->params = $this->getParams($to,$params);
 
         return is_array($to) ? $this->sendMulti() : $this->sendOnce();
     }
 
     /**
+     * @param $config
+     * @return mixed
+     */
+    abstract protected function getConfig($config);
+
+    /**
      * 校验传入参数
      *
      * @param $to
-     * @param $params
+     * @param DmConfigAbstract $params
      * @return mixed
      */
-    abstract protected function validateParams($to,$params);
+    abstract protected function getParams($to,DmConfigAbstract $params);
 
     /**
      * 单发

@@ -17,7 +17,7 @@ $config = require_once $path.'/../config/sms.php';
 // 腾讯云短信
 
 // 实例化
-$ten_sms = new \OverNick\Dm\Client\TencentClient(array_get($config,'drivers.tencent'));
+$ten_sms = new \OverNick\Dm\Client\TencentDmClient(array_get($config,'drivers.tencent'));
 
 $param = new \OverNick\Dm\Config\DmConfig();
 $param->setParams(['123456', '产品名']);   // 设置参数
@@ -30,7 +30,7 @@ $ten_sms->send('13100000001',$param);
 // 阿里云短信
 
 // 实例化
-$sms = new \OverNick\Dm\Client\AliyunClient(array_get($config,'drivers.aliyun'));
+$sms = new \OverNick\Dm\Client\AliyunDmClient(array_get($config,'drivers.aliyun'));
 
 $param->setParams(['123456', '产品名']);   // 设置参数
 $param->setSign('签名');              // 签名
