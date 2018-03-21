@@ -125,6 +125,11 @@ class DmConfigAbstract implements Config, ArrayAccess
             $this->set(snake_case(substr($name, 3)), array_get($arguments, '0', true));
             return $this;
         }
+
+        if ($prefix == 'get') {
+            return $this->get(snake_case(substr($name, 3)));
+        }
+
         throw new Exception("Call to undefined method {$name}()");
     }
 }

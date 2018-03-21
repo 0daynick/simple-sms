@@ -16,22 +16,7 @@ class DmServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('sms',function($app){
-
-            $dm =  new DmManage($app);
-
-            $initList = $this->app['config']['sms']['init'];
-
-            if(!is_array($initList) || count($initList) <= 0){
-                throw new InvalidArgumentException('not init drivers');
-            }
-
-            foreach ($initList as $key => $classed){
-                $dm->extend($key,function() use($dm, $key, $classed){
-                    $instance = new \ReflectionClass($classed);
-                    $instance->newInstance($dm->getConfig($key));
-                });
-            }
-
+            return new DmManage($app->make('config')->get('sms'));
         });
     }
 }

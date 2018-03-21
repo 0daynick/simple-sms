@@ -10,26 +10,28 @@ namespace OverNick\Dm;
 
 use Closure;
 use InvalidArgumentException;
-use OverNick\Dm\Client\DmClientAbstract;
-use function PHPSTORM_META\type;
+use OverNick\Dm\Client\AliyunDmClient;
+use OverNick\Dm\Client\TencentDmClient;
 
 class DmManage
 {
+
     /**
-     * The application instance.
-     *
-     * @var \Illuminate\Foundation\Application
+     * @var
      */
-    protected $app;
+    protected $config;
 
     protected $dm = [];
 
     protected $customCreators = [];
 
-
-    public function __construct($app)
+    /**
+     * DmManage constructor.
+     * @param $config
+     */
+    public function __construct($config)
     {
-        $this->app = $app;
+        $this->config = $config;
     }
 
     /**
@@ -84,6 +86,41 @@ class DmManage
     }
 
     /**
+     * 实例化阿里云短信
+     *
+     * @param $config
+     * @return object
+     */
+    protected function createAliyunDriver($config)
+    {
+        return $this->resolveDriver(AliyunDmClient::class, $config);
+    }
+
+    /**
+     * 实例化腾讯云短信
+     *
+     * @param $config
+     * @return object
+     */
+    protected function createTencentDriver($config)
+    {
+        return $this->resolveDriver(TencentDmClient::class, $config);
+    }
+
+    /**
+     * 实例化程序
+     *
+     * @param $class
+     * @param $config
+     * @return object
+     */
+    private function resolveDriver($class, $config)
+    {
+        $instance = new \ReflectionClass($class);
+        return $instance->newInstance($config);
+    }
+
+    /**
      * Call a custom driver creator.
      *
      * @param  array  $config
@@ -91,7 +128,7 @@ class DmManage
      */
     protected function callCustomCreator(array $config)
     {
-        return $this->customCreators[$config['driver']]($this->app, $config);
+        return $this->customCreators[$config['driver']]($config);
     }
 
     /**
@@ -102,7 +139,7 @@ class DmManage
      */
     public function getConfig($name)
     {
-        return $this->app['config']["sms.drivers.{$name}"];
+        return array_get($this->config, "drivers.{$name}");
     }
 
     /**
@@ -112,18 +149,19 @@ class DmManage
      */
     public function getDefaultDriver()
     {
-        return $this->app['config']['sms.default'];
+        return array_get($this->config, 'default');
     }
 
     /**
      * Set the default cache driver name.
      *
-     * @param  string  $name
-     * @return void
+     * @param $name
+     * @return $this
      */
     public function setDefaultDriver($name)
     {
-        $this->app['config']['sms.default'] = $name;
+        array_set($this->config,'default', $name);
+        return $this;
     }
 
     /**

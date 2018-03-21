@@ -8,10 +8,17 @@
 namespace OverNick\Dm\Abstracts;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
+use OverNick\Dm\Config\ResultConfig;
+use OverNick\Dm\Exceptions\BadResultException;
+use InvalidArgumentException;
 
+/**
+ * Class DmClientAbstract
+ * @package OverNick\Dm\Abstracts
+ */
 abstract class DmClientAbstract
 {
-
     /**
      * @var array 配置信息
      */
@@ -29,25 +36,46 @@ abstract class DmClientAbstract
      */
     protected $params;
 
-    public function __construct(array $config = [])
+    /**
+     * 返回的对象
+     *
+     * @var ResultConfig
+     */
+    protected $result;
+
+    public function __construct(array $config = [],Client $client = null)
     {
         $this->config = $this->getConfig($config);
 
-        $this->client = new Client();
+        $this->client = is_null($client) ? new Client() : $client;
+
+        $this->result = new ResultConfig();
     }
 
     /**
      * 发送短信
      *
-     * @param $to
      * @param DmConfigAbstract $params
      * @return mixed
+     * @throws BadResultException
      */
-    public function send($to,DmConfigAbstract $params)
+    public function send(DmConfigAbstract $params)
     {
-        $this->params = $this->getParams($to,$params);
+        if(!isset($params['to'])){
+            throw new InvalidArgumentException("params is empty.");
+        }
 
-        return is_array($to) ? $this->sendMulti() : $this->sendOnce();
+        $this->params = $this->getParams($params);
+
+        // 批量发送还是单条发送
+        $result =  is_array($params['to']) ? $this->sendMulti() : $this->sendOnce();
+
+        // 必须按照约定返回对象
+        if (!$result instanceof ResultConfig) {
+            // throw new BadResultException();
+        }
+
+        return $result;
     }
 
     /**
@@ -59,11 +87,10 @@ abstract class DmClientAbstract
     /**
      * 校验传入参数
      *
-     * @param $to
      * @param DmConfigAbstract $params
      * @return mixed
      */
-    abstract protected function getParams($to,DmConfigAbstract $params);
+    abstract protected function getParams(DmConfigAbstract $params);
 
     /**
      * 单发
@@ -78,5 +105,4 @@ abstract class DmClientAbstract
      * @return mixed
      */
     abstract protected function sendMulti();
-
 }

@@ -27,12 +27,5 @@ return [
             'access_key_id' => '控制台中的AccessKeyId',
             'access_secret' => '控制台中的AccessSecret'
         ]
-    ],
-    /**
-     * 需要初始化的内容，如果不需要自启动，注释即可
-     */
-    'init' => [
-        'aliyun' => \OverNick\Dm\Client\AliyunDmClient::class,
-        'tencent' => \OverNick\Dm\Client\TencentDmClient::class
     ]
 ];

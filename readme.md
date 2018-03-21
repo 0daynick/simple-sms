@@ -42,29 +42,32 @@ class SmsController extends Controller
         $config = new DmConfig();
         
         // 设置模版参数
-        $config->setParams(json_encode([
+        $config->setParams([
             "code" => "123456",
             "product" => "001"
-            ], JSON_UNESCAPED_UNICODE));
+            ]);
         
         // 设置模版id
         $config->setTpl('001');
-        
+        // 设置收信手机号
+        $config->setTo('13100000001');
         // 使用签名
         $config->setSign('阿里云签名');
         
         // 默认使用阿里云短信
-        app('sms')->send('13100000001',$config);
+        app('sms')->send($config);
         
         // 设置模版
         $config->setTpl('001');
+         // 设置收信手机号
+         $config->setTo('13100000001');
         // 设置模版参数
         $config->setParams([1,2,3]);
         // 设置签名
         $this->setSign('腾讯云签名');
         
         // 使用腾讯云短信
-        app('sms')->dirver('tencent')->send('13100000001',$config);
+        app('sms')->dirver('tencent')->send($config);
     }
 }
 
@@ -114,32 +117,49 @@ require_once $path.'/../vendor/autoload.php';
 
 // 引用配置文件
 $config = require_once $path.'/../config/sms.php';
-
+  
 // 腾讯云短信
-
 // 实例化
 $ten_sms = new \OverNick\Dm\Client\TencentDmClient(array_get($config,'drivers.tencent'));
-
 $param = new \OverNick\Dm\Config\DmConfig();
+$param->setTo('13100000001');
 $param->setParams(['123456', '产品名']);   // 设置参数
 $param->setSign('签名');              // 签名
 $param->setTpl('001');             // 模版id
-
-// 发送短信
-$ten_sms->send('13100000001',$param);
-
-// 阿里云短信
-
-// 实例化
-$sms = new \OverNick\Dm\Client\AliyunDmClient(array_get($config,'drivers.aliyun'));
-
+  
+// 群发
+$ten_sms->send($param);
+$param = new \OverNick\Dm\Config\DmConfig();
+$param->setTo(['13100000001', '13100000002']);
 $param->setParams(['123456', '产品名']);   // 设置参数
 $param->setSign('签名');              // 签名
-$param->setParams(json_encode([
+$param->setTpl('001');             // 模版id
+// 发送短信
+$ten_sms->send($param);
+  
+  
+// 阿里云短信
+// 实例化
+$sms = new \OverNick\Dm\Client\AliyunDmClient(array_get($config,'drivers.aliyun'));
+$param->setTo('13100000001');         // 设置短信
+$param->setSign('签名');              // 签名
+// 设置参数
+$param->setParams([
     "code" => "123456",
     "product" => "001"
-], JSON_UNESCAPED_UNICODE));
-
+]);
 // 发送短信
-$result = $sms->send('13100000001',$param);
+$result = $sms->send($param);
+ 
+// 群发
+$param->setTo(['13100000001', '13100000002']);         // 设置短信
+$param->setSign(['签名', '签名2']);              // 签名
+// 设置参数
+$param->setParams([
+    ["code" => "123456","product" => "001"],
+    ["code" => "123456","product" => "001"],
+]);
+  
+// 发送短信
+$result = $sms->send($param);
 ```

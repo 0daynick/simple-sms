@@ -35,11 +35,10 @@ class TencentDmClient extends DmClientAbstract
     /**
      * 获取参数
      *
-     * @param $to
      * @param DmConfigAbstract $params
      * @return DmConfigAbstract
      */
-    protected function getParams($to, DmConfigAbstract $params)
+    protected function getParams(DmConfigAbstract $params)
     {
         if(!(isset($params['tpl']) &&
             isset($params['sign']) &&
@@ -47,8 +46,6 @@ class TencentDmClient extends DmClientAbstract
         {
             throw new InvalidArgumentException("params is empty.");
         }
-
-        $params['to'] = $to;
 
         return $params;
     }
@@ -90,7 +87,7 @@ class TencentDmClient extends DmClientAbstract
             ]);
         }
 
-        return $this->sendSms($url,$tel_params);
+        return $this->sendSms($url, $tel_params);
     }
 
     /**
@@ -100,7 +97,7 @@ class TencentDmClient extends DmClientAbstract
      * @param $mobile_params
      * @return mixed
      */
-    protected function sendSms($url,$mobile_params)
+    protected function sendSms($url, $mobile_params)
     {
         // 随机码
         $rand_code = $this->getRandom();
@@ -135,10 +132,38 @@ class TencentDmClient extends DmClientAbstract
         // 参数利用完成后清除参数
         $this->clearArgs();
 
-        return $this->client->post($url,[
+        $result =  $this->client->post($url,[
             'verify' => false,
-            'json' => json_encode($postData)
+            'json' => json_encode($postData),
+            'http_errors' => false
         ]);
+
+
+        // 得到接口返回结果, 并解析成数组
+        $body = json_decode($result->getBody(), true);
+
+        $this->result->setOrigin($body);
+
+        // 接口请求错误
+        if(isset($body['ActionStatus'])){
+            return $this->result
+                ->setState(false)
+                ->setCode($body['ErrorCode'])
+                ->setMessage($body['ErrorInfo'])
+                ->setOrigin($body);
+        }
+
+        $this->result->setCode($body['result'])
+            ->setMessage($body['errmsg']);
+
+        // 业务请求错误
+        if($body['result'] == 0){
+            $this->result->setState(true);
+        }else{
+            $this->result->setState(false);
+        }
+
+        return $this->result;
     }
 
     /**

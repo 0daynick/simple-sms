@@ -20,26 +20,27 @@ $config = require_once $path.'/../config/sms.php';
 $ten_sms = new \OverNick\Dm\Client\TencentDmClient(array_get($config,'drivers.tencent'));
 
 $param = new \OverNick\Dm\Config\DmConfig();
+$param->setTo('13100000001');
 $param->setParams(['123456', '产品名']);   // 设置参数
 $param->setSign('签名');              // 签名
 $param->setTpl('001');             // 模版id
 
 // 发送短信
-$ten_sms->send('13100000001',$param);
+$ten_sms->send($param);
 
 // 阿里云短信
 
 // 实例化
 $sms = new \OverNick\Dm\Client\AliyunDmClient(array_get($config,'drivers.aliyun'));
-
-$param->setParams(['123456', '产品名']);   // 设置参数
-$param->setSign('签名');              // 签名
-$param->setParams(json_encode([
+$param->setTo('13100000001');                 // 设置手机号
+$param->setParams(['123456', '产品名']);       // 设置参数
+$param->setSign('签名');                      // 签名
+$param->setParams([
     "code" => "123456",
     "product" => "001"
-], JSON_UNESCAPED_UNICODE));
+]);
 
 // 发送短信
-$result = $sms->send('13100000001',$param);
+$result = $sms->send($param);
 
 
