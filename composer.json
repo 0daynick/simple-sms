@@ -1,6 +1,7 @@
 {
-    "name": "overnic/dm-package",
-    "description": "a laravel dm package",
+    "name": "overnic/sms",
+    "description": "a send sms package",
+    "keywords":["sms", "dm", "aliyun sms", "tencent sms"],
     "type": "library",
     "license": "MIT",
     "authors": [
