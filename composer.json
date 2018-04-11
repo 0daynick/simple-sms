@@ -1,5 +1,5 @@
 {
-    "name": "overnic/sms",
+    "name": "overnic/simple-sms",
     "description": "a send sms package",
     "keywords":["sms", "dm", "aliyun sms", "tencent sms"],
     "type": "library",
