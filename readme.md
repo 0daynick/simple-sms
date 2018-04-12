@@ -16,7 +16,7 @@ composer require overnic/dm-package
 ```php
 'providers' => [
     // ...
-    OverNick\Dm\DmServiceProvider::class,
+    OverNick\Sms\SmsServiceProvider::class,
 ],
 ```
 
