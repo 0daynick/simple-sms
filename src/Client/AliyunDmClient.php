@@ -6,12 +6,13 @@
  * Time: 17:52
  */
 
-namespace OverNick\Dm\Client;
+namespace OverNick\Sms\Client;
 
 use InvalidArgumentException;
-use OverNick\Dm\Abstracts\DmClientAbstract;
-use OverNick\Dm\Abstracts\DmConfigAbstract;
-use OverNick\Dm\Config\ResultConfig;
+use OverNick\Sms\Abstracts\SmsClientAbstract;
+use OverNick\Sms\Config\Repository as Config;
+use OverNick\Sms\Config\ResultConfig;
+use OverNick\Support\Arr;
 
 /**
  * 阿里云短信服务
@@ -19,7 +20,7 @@ use OverNick\Dm\Config\ResultConfig;
  * Class AliyunClient
  * @package OverNick\Dm\Client
  */
-class AliyunDmClient extends DmClientAbstract
+class AliyunDmClient extends SmsClientAbstract
 {
     /**
      * @var string 阿里云短信请求的接口地址
@@ -106,10 +107,10 @@ class AliyunDmClient extends DmClientAbstract
     /**
      * 获取参数
      *
-     * @param DmConfigAbstract $params
-     * @return DmConfigAbstract
+     * @param Config $params
+     * @return Config
      */
-    protected function getParams(DmConfigAbstract $params)
+    protected function getParams(Config $params)
     {
         if(!(isset($params['tpl']) &&
             isset($params['sign']) &&
@@ -202,7 +203,7 @@ class AliyunDmClient extends DmClientAbstract
 
         // 设置源以及错误码
         $this->result->setOrigin($body)
-            ->setMessage(array_get($this->errors, $body['Code'], '未知错误'))
+            ->setMessage(Arr::get($this->errors, $body['Code'], '未知错误'))
             ->setCode($body['Code']);
 
         // 判断是否请求成功

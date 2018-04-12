@@ -6,11 +6,11 @@
  * Time: 17:52
  */
 
-namespace OverNick\Dm\Client;
+namespace OverNick\Sms\Client;
 
 use InvalidArgumentException;
-use OverNick\Dm\Abstracts\DmClientAbstract;
-use OverNick\Dm\Abstracts\DmConfigAbstract;
+use OverNick\Sms\Config\Repository as Config;
+use OverNick\Sms\Abstracts\SmsClientAbstract;
 
 /**
  * 腾讯云短信服务
@@ -18,7 +18,7 @@ use OverNick\Dm\Abstracts\DmConfigAbstract;
  * Class TencentClient
  * @package OverNick\Dm\Client
  */
-class TencentDmClient extends DmClientAbstract
+class TencentDmClient extends SmsClientAbstract
 {
     /**
      * 验证初始化参数
@@ -35,10 +35,10 @@ class TencentDmClient extends DmClientAbstract
     /**
      * 获取参数
      *
-     * @param DmConfigAbstract $params
-     * @return DmConfigAbstract
+     * @param Config $params
+     * @return Config
      */
-    protected function getParams(DmConfigAbstract $params)
+    protected function getParams(Config $params)
     {
         if(!(isset($params['tpl']) &&
             isset($params['sign']) &&

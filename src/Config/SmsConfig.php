@@ -6,20 +6,19 @@
  * Time: 14:40
  */
 
-namespace OverNick\Dm\Config;
+namespace OverNick\Sms\Config;
 
-
-use OverNick\Dm\Abstracts\DmConfigAbstract;
+use OverNick\Sms\Config\Repository as Config;
 
 /**
- * Class TencentSmsConfig
+ * Class SmsConfig
  * @method $this setTpl($tpl)
  * @method $this setTo($to)
  * @method $this setSign($sign)
  * @method $this setParams(array $params)
  * @package OverNick\Dm\Config
  */
-class DmConfig extends DmConfigAbstract
+class SmsConfig extends Config
 {
 
 }

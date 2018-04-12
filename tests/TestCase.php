@@ -8,6 +8,9 @@
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
+use OverNick\Sms\Config\SmsConfig;
+use OverNick\Sms\SmsManage;
+
 class TestCase extends BaseTestCase
 {
 
@@ -17,10 +20,10 @@ class TestCase extends BaseTestCase
         $config = require_once TEST_ROOT.'/../config/sms.php';
 
         // 实例化程序
-        $sms = new \OverNick\Dm\DmManage($config);
+        $sms = new SmsManage($config);
 
         // 参数
-        $params = new OverNick\Dm\Config\DmConfig();
+        $params = new SmsConfig();
         $params->setTo('13100000000');
         $params->setTpl('SMS_00000000');
         $params->setSign('签名');
@@ -30,7 +33,7 @@ class TestCase extends BaseTestCase
         ]);
 
         // 执行发送
-        $result = $sms->send($params);
+        $result = $sms->driver('tencent')->send($params);
 
         $this->assertTrue($result->getState(), '请求失败：'. $result->getMessage());
     }

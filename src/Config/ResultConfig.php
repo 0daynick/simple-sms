@@ -6,11 +6,9 @@
  * Time: 16:02
  */
 
-namespace OverNick\Dm\Config;
+namespace OverNick\Sms\Config;
 
-
-use Illuminate\Contracts\Support\Arrayable;
-use OverNick\Dm\Abstracts\DmConfigAbstract;
+use OverNick\Sms\Config\Repository as Config;
 
 /**
  * 结果返回
@@ -26,7 +24,7 @@ use OverNick\Dm\Abstracts\DmConfigAbstract;
  * @method $this getOrigin()
  * @package OverNick\Dm\Config
  */
-class ResultConfig extends DmConfigAbstract
+class ResultConfig extends Config
 {
     /**
      * state 状态

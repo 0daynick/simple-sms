@@ -6,7 +6,7 @@
  * Time: 16:10
  */
 
-namespace OverNick\Dm\Exceptions;
+namespace OverNick\Sms\Exceptions;
 
 use Exception;
 use Throwable;

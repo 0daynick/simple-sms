@@ -5,19 +5,19 @@
  * Date: 2018/1/3
  * Time: 16:58
  */
-namespace OverNick\Dm\Abstracts;
+namespace OverNick\Sms\Abstracts;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\BadResponseException;
-use OverNick\Dm\Config\ResultConfig;
-use OverNick\Dm\Exceptions\BadResultException;
+use OverNick\Sms\Config\ResultConfig;
+use OverNick\Sms\Exceptions\BadResultException;
 use InvalidArgumentException;
+use OverNick\Sms\Config\Repository as Config;
 
 /**
  * Class DmClientAbstract
  * @package OverNick\Dm\Abstracts
  */
-abstract class DmClientAbstract
+abstract class SmsClientAbstract
 {
     /**
      * @var array 配置信息
@@ -47,7 +47,7 @@ abstract class DmClientAbstract
     {
         $this->config = $this->getConfig($config);
 
-        $this->client = is_null($client) ? new Client() : $client;
+        $this->client = $client ?: new Client();
 
         $this->result = new ResultConfig();
     }
@@ -55,11 +55,11 @@ abstract class DmClientAbstract
     /**
      * 发送短信
      *
-     * @param DmConfigAbstract $params
+     * @param Config $params
      * @return mixed
      * @throws BadResultException
      */
-    public function send(DmConfigAbstract $params)
+    public function send(Config $params)
     {
         if(!isset($params['to'])){
             throw new InvalidArgumentException("params is empty.");
@@ -72,7 +72,7 @@ abstract class DmClientAbstract
 
         // 必须按照约定返回对象
         if (!$result instanceof ResultConfig) {
-            // throw new BadResultException();
+            throw new BadResultException();
         }
 
         return $result;
@@ -87,10 +87,10 @@ abstract class DmClientAbstract
     /**
      * 校验传入参数
      *
-     * @param DmConfigAbstract $params
+     * @param Config $params
      * @return mixed
      */
-    abstract protected function getParams(DmConfigAbstract $params);
+    abstract protected function getParams(Config $params);
 
     /**
      * 单发

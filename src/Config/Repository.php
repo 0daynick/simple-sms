@@ -6,17 +6,18 @@
  * Time: 10:20
  */
 
-namespace OverNick\Dm\Abstracts;
+namespace OverNick\Sms\Config;
 
 use ArrayAccess;
 use Exception;
-use Illuminate\Contracts\Config\Repository as Config;
+use OverNick\Support\Arr;
+use OverNick\Support\Str;
 
 /**
  * Class DmConfigAbstract
  * @package OverNick\Dm\Abstracts
  */
-class DmConfigAbstract implements Config, ArrayAccess
+class Repository implements ArrayAccess
 {
     /**
      * @var array
@@ -39,7 +40,7 @@ class DmConfigAbstract implements Config, ArrayAccess
      */
     public function get($key, $default = null)
     {
-        return array_get($this->config, $key, $default);
+        return Arr::get($this->config, $key, $default);
     }
 
     /**
@@ -48,7 +49,7 @@ class DmConfigAbstract implements Config, ArrayAccess
      */
     public function set($key, $value = null)
     {
-        array_set($this->config, $key, $value);
+        Arr::set($this->config, $key, $value);
     }
 
     /**
@@ -66,7 +67,7 @@ class DmConfigAbstract implements Config, ArrayAccess
      */
     public function prepend($key, $value)
     {
-        array_prepend($this->config, $value, $key);
+        Arr::prepend($this->config, $value, $key);
     }
 
     /**
@@ -122,12 +123,12 @@ class DmConfigAbstract implements Config, ArrayAccess
     {
         $prefix = substr($name, 0, 3);
         if ($prefix == 'set') {
-            $this->set(snake_case(substr($name, 3)), array_get($arguments, '0', true));
+            $this->set(Str::snake(substr($name, 3)), Arr::get($arguments, '0', true));
             return $this;
         }
 
         if ($prefix == 'get') {
-            return $this->get(snake_case(substr($name, 3)));
+            return $this->get(Str::snake(substr($name, 3)));
         }
 
         throw new Exception("Call to undefined method {$name}()");

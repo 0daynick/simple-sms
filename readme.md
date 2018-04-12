@@ -26,7 +26,7 @@ composer require overnic/dm-package
 
 namespace App\Http\Controllers;
 
-use OverNick\Dm\Config\DmConfig;
+use OverNick\Sms\Config\SmsConfig;
 
 class SmsController extends Controller
 {
@@ -39,7 +39,7 @@ class SmsController extends Controller
     public function index()
     {
         // 初始化配置文件
-        $config = new DmConfig();
+        $config = new SmsConfig();
         
         // 设置模版参数
         $config->setParams([
@@ -100,7 +100,7 @@ return [
 5. 扩展...
 
 
-> 不嵌套框架使用
+> 独立使用
 ```php
 <?php
 /**
@@ -110,56 +110,35 @@ return [
  * Time: 19:20
  */
 
-$path =  __DIR__.DIRECTORY_SEPARATOR;
-
 // composer 自动加载，路径自行修改
 require_once $path.'/../vendor/autoload.php';
 
-// 引用配置文件
+// 引用配置文件，路径可自行调整
 $config = require_once $path.'/../config/sms.php';
-  
-// 腾讯云短信
-// 实例化
-$ten_sms = new \OverNick\Dm\Client\TencentDmClient(array_get($config,'drivers.tencent'));
-$param = new \OverNick\Dm\Config\DmConfig();
+
+// 实例化短信服务类
+$manage = new \OverNick\Sms\SmsManage($config);
+
+// 短信模版参数短信
+$param = new \OverNick\Sms\Config\SmsConfig();
 $param->setTo('13100000001');
 $param->setParams(['123456', '产品名']);   // 设置参数
 $param->setSign('签名');              // 签名
 $param->setTpl('001');             // 模版id
-  
-// 群发
-$ten_sms->send($param);
-$param = new \OverNick\Dm\Config\DmConfig();
-$param->setTo(['13100000001', '13100000002']);
-$param->setParams(['123456', '产品名']);   // 设置参数
-$param->setSign('签名');              // 签名
-$param->setTpl('001');             // 模版id
-// 发送短信
-$ten_sms->send($param);
-  
-  
-// 阿里云短信
-// 实例化
-$sms = new \OverNick\Dm\Client\AliyunDmClient(array_get($config,'drivers.aliyun'));
-$param->setTo('13100000001');         // 设置短信
-$param->setSign('签名');              // 签名
-// 设置参数
+
+// 使用腾讯云发送短信
+$manage->driver('tencent')->send($param);
+
+
+// 阿里云短信模版参数
+$param->setTo('13100000001');                 // 设置手机号
+$param->setParams(['123456', '产品名']);       // 设置参数
+$param->setSign('签名');                      // 签名
 $param->setParams([
     "code" => "123456",
     "product" => "001"
 ]);
-// 发送短信
-$result = $sms->send($param);
- 
-// 群发
-$param->setTo(['13100000001', '13100000002']);         // 设置短信
-$param->setSign(['签名', '签名2']);              // 签名
-// 设置参数
-$param->setParams([
-    ["code" => "123456","product" => "001"],
-    ["code" => "123456","product" => "001"],
-]);
-  
-// 发送短信
-$result = $sms->send($param);
+
+// 使用阿里云发送短信
+$manage->driver('aliyun')->send($param);
 ```

@@ -14,24 +14,21 @@ require_once $path.'/../vendor/autoload.php';
 // 引用配置文件
 $config = require_once $path.'/../config/sms.php';
 
-// 腾讯云短信
+// 实例化短信服务类
+$manage = new \OverNick\Sms\SmsManage($config);
 
-// 实例化
-$ten_sms = new \OverNick\Dm\Client\TencentDmClient(array_get($config,'drivers.tencent'));
-
-$param = new \OverNick\Dm\Config\DmConfig();
+// 短信模版参数短信
+$param = new \OverNick\Sms\Config\SmsConfig();
 $param->setTo('13100000001');
 $param->setParams(['123456', '产品名']);   // 设置参数
 $param->setSign('签名');              // 签名
 $param->setTpl('001');             // 模版id
 
 // 发送短信
-$ten_sms->send($param);
+$manage->driver('tencent')->send($param);
 
-// 阿里云短信
 
-// 实例化
-$sms = new \OverNick\Dm\Client\AliyunDmClient(array_get($config,'drivers.aliyun'));
+// 阿里云短信模版参数
 $param->setTo('13100000001');                 // 设置手机号
 $param->setParams(['123456', '产品名']);       // 设置参数
 $param->setSign('签名');                      // 签名
@@ -41,6 +38,6 @@ $param->setParams([
 ]);
 
 // 发送短信
-$result = $sms->send($param);
+$manage->driver('aliyun')->send($param);
 
 
