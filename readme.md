@@ -3,7 +3,7 @@
 ## 安装
 
 ```shell
-composer require overnic/dm-package
+composer require overnic/simple-sms
 ```
 
 ## 配置
