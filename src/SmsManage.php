@@ -29,7 +29,7 @@ class SmsManage extends Manager
     {
         return $this->resolveDriver(
             AliyunDmClient::class,
-            Arr::get($this->app, 'drivers.aliyun')
+            Arr::get($this->config, 'drivers.aliyun')
         );
     }
 
@@ -42,7 +42,7 @@ class SmsManage extends Manager
     {
         return $this->resolveDriver(
             TencentDmClient::class,
-            Arr::get($this->app, 'drivers.tencent')
+            Arr::get($this->config, 'drivers.tencent')
         );
     }
 
