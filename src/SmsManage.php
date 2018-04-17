@@ -29,7 +29,7 @@ class SmsManage extends Manager
     {
         return $this->resolveDriver(
             AliyunDmClient::class,
-            Arr::get($this->config, 'drivers.aliyun')
+            $this->getConfigure('drivers.aliyun')
         );
     }
 
@@ -42,7 +42,7 @@ class SmsManage extends Manager
     {
         return $this->resolveDriver(
             TencentDmClient::class,
-            Arr::get($this->config, 'drivers.tencent')
+            $this->getConfigure('drivers.tencent')
         );
     }
 
@@ -66,18 +66,17 @@ class SmsManage extends Manager
      */
     public function getDefaultDriver()
     {
-        return Arr::get($this->app, 'default');
+        return $this->getConfigure('default');
     }
 
     /**
      * Set the default cache driver name.
      *
-     * @param $name
+     * @param $driver
      * @return $this
      */
-    public function setDefaultDriver($name)
+    public function setDefaultDriver($driver)
     {
-        Arr::set($this->app,'default', $name);
-        return $this;
+        return $this->setConfigure('default', $driver);
     }
 }
