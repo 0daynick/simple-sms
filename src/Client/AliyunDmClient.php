@@ -57,6 +57,9 @@ class AliyunDmClient extends SmsClientAbstract
      */
     protected $algo = 'HMAC-SHA1';
 
+    /**
+     * @var string
+     */
     protected $dateTimeFormat = 'Y-m-d\TH:i:s\Z';
 
     /**
@@ -93,15 +96,17 @@ class AliyunDmClient extends SmsClientAbstract
      * 获取配置信息
      *
      * @param $config
-     * @return mixed
      */
-    protected function getConfig($config)
+    protected function setConfig($config)
     {
         if(!isset($config['access_key_id']) || !isset($config['access_secret'])){
             throw new InvalidArgumentException("Configure access_key_id or access_secret not found.");
         }
 
-        return $config;
+        $this->config = [
+            'access_key_id' => $config['access_secret'],
+            'access_secret' =>  $config['access_secret']
+        ];
     }
 
     /**

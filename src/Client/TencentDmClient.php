@@ -23,13 +23,16 @@ class TencentDmClient extends SmsClientAbstract
     /**
      * 验证初始化参数
      */
-    protected function getConfig($config)
+    protected function setConfig($config)
     {
         if(!isset($config['app_id']) || !isset($config['app_key'])){
             throw new InvalidArgumentException("Configure app_id or app_key not found.");
         }
 
-        return $config;
+        $this->config = [
+            'app_id' => $config['app_id'],
+            'app_key' => $config['app_key']
+        ];
     }
 
     /**

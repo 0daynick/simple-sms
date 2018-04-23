@@ -45,7 +45,7 @@ abstract class SmsClientAbstract
 
     public function __construct(array $config = [],Client $client = null)
     {
-        $this->config = $this->getConfig($config);
+        $this->setConfig($config);
 
         $this->client = $client ?: new Client();
 
@@ -80,9 +80,8 @@ abstract class SmsClientAbstract
 
     /**
      * @param $config
-     * @return mixed
      */
-    abstract protected function getConfig($config);
+    abstract protected function setConfig($config);
 
     /**
      * 校验传入参数
