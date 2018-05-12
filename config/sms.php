@@ -30,8 +30,8 @@ return [
         // 创蓝配置
         'danglang' => [
             'driver' => 'danglang',
-            'account' => '账户',
-            'password' => '密码',
+            'app_id' => 'appId',
+            'key' => 'Key',
         ]
     ]
 ];

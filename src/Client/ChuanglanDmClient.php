@@ -12,10 +12,9 @@ use InvalidArgumentException;
 use OverNick\Sms\Abstracts\SmsClientAbstract;
 use OverNick\Sms\Config\Repository as Config;
 use OverNick\Support\AES;
-use OverNick\Support\Arr;
 
 /**
- * 创蓝短信接口
+ * 当郎短信接口
  *
  * Class ChuanglanDmClient
  * @package OverNick\Sms\Client
@@ -51,13 +50,13 @@ class ChuangLanDmClient extends SmsClientAbstract
      */
     public function setConfig($config)
     {
-        if(!isset($config['account']) || !isset($config['password'])){
-            throw new InvalidArgumentException("Configure account or password not found.");
+        if(!isset($config['app_id']) || !isset($config['key'])){
+            throw new InvalidArgumentException("Configure app_id or key not found.");
         }
 
         $this->config = [
-            'account' => $config['account'],
-            'password' =>  $config['password']
+            'app_id' => $config['app_id'],
+            'key' =>  $config['key']
         ];
     }
 
@@ -129,9 +128,9 @@ class ChuangLanDmClient extends SmsClientAbstract
     public function sendSms($smsData)
     {
         $post_data = [
-            'appId' => $this->config['account'],
-            'sign' => AES::encrypt(time(), $this->config['password'],''),
-            'smsData' => AES::encrypt(json_encode($smsData),$this->config['password'],''),
+            'appId' => $this->config['app_id'],
+            'sign' => AES::encrypt(time(), $this->config['key'],''),
+            'smsData' => AES::encrypt(json_encode($smsData),$this->config['key'],''),
         ];
 
         $result = $this->client->request('GET', $this->url, [
