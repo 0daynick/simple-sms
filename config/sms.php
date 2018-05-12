@@ -26,6 +26,12 @@ return [
             'driver' => 'aliyun',
             'access_key_id' => '控制台中的AccessKeyId',
             'access_secret' => '控制台中的AccessSecret'
+        ],
+        // 创蓝配置
+        'danglang' => [
+            'driver' => 'danglang',
+            'account' => '账户',
+            'password' => '密码',
         ]
     ]
 ];

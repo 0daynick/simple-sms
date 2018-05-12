@@ -117,9 +117,10 @@ class AliyunDmClient extends SmsClientAbstract
      */
     protected function getParams(Config $params)
     {
-        if(!(isset($params['tpl']) &&
-            isset($params['sign']) &&
-            isset($params['params'])))
+        if((!isset($params['to']) ||
+            !isset($params['tpl']) ||
+            !isset($params['sign']) ||
+            !isset($params['params'])))
         {
             throw new InvalidArgumentException("params is empty.");
         }
@@ -236,17 +237,6 @@ class AliyunDmClient extends SmsClientAbstract
         $signature =  base64_encode(hash_hmac('sha1', $stringToSign, $this->config['access_secret']."&", true));
 
         return $signature;
-    }
-
-    /**
-     * 数组转换成json字符串
-     *
-     * @param $data
-     * @return string
-     */
-    private function arrayToJson($data)
-    {
-        return is_array($data) ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
     }
 
     /**

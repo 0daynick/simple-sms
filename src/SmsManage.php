@@ -7,6 +7,8 @@
  */
 namespace OverNick\Sms;
 
+use OverNick\Sms\Client\ChuangLanDmClient;
+use OverNick\Sms\Config\Sms;
 use OverNick\Support\Arr;
 use OverNick\Sms\Client\AliyunDmClient;
 use OverNick\Sms\Client\TencentDmClient;
@@ -29,7 +31,7 @@ class SmsManage extends Manager
     {
         return $this->resolveDriver(
             AliyunDmClient::class,
-            $this->getConfigure('drivers.aliyun')
+            $this->getConfigure('drivers.'.Sms::DRIVER_ALIYUN)
         );
     }
 
@@ -42,7 +44,20 @@ class SmsManage extends Manager
     {
         return $this->resolveDriver(
             TencentDmClient::class,
-            $this->getConfigure('drivers.tencent')
+            $this->getConfigure('drivers.'.Sms::DRIVER_TENCENT)
+        );
+    }
+
+    /**
+     * 实例化当郎科技短信
+     *
+     * @return object
+     */
+    protected function createDangLangDriver()
+    {
+        return $this->resolveDriver(
+            ChuangLanDmClient::class,
+            $this->getConfigure('drivers.'.Sms::DRIVER_DANGLANG)
         );
     }
 

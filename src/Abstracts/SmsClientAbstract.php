@@ -79,6 +79,17 @@ abstract class SmsClientAbstract
     }
 
     /**
+     * 数组转换成json字符串
+     *
+     * @param $data
+     * @return string
+     */
+    protected function arrayToJson($data)
+    {
+        return is_array($data) ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data;
+    }
+
+    /**
      * @param $config
      */
     abstract protected function setConfig($config);

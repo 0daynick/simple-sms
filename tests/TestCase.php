@@ -14,14 +14,21 @@ use OverNick\Sms\SmsManage;
 class TestCase extends BaseTestCase
 {
 
-    public function testSmsSend()
+    public function DangLangSend()
     {
-        // 引用配置文件
-        $config = require_once TEST_ROOT.'/../config/sms.php';
 
-        // 实例化程序
-        $sms = new SmsManage($config);
+    }
 
+    public function AliyunSend()
+    {
+        
+    }
+
+    /**
+     * @test
+     */
+    public function TencentSend()
+    {
         // 参数
         $params = new SmsConfig();
         $params->setTo('13100000000');
@@ -33,8 +40,20 @@ class TestCase extends BaseTestCase
         ]);
 
         // 执行发送
-        $result = $sms->driver('tencent')->send($params);
+        $result = $this->getSms()->driver('tencent')->send($params);
 
         $this->assertTrue($result->getState(), '请求失败：'. $result->getMessage());
+    }
+
+    /**
+     * @return SmsManage
+     */
+    protected function getSms()
+    {
+        // 引用配置文件
+        $config = require_once TEST_ROOT.'/../config/sms.php';
+
+        // 实例化程序
+        return new SmsManage($config);
     }
 }
