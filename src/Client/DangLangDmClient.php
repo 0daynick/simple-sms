@@ -19,7 +19,7 @@ use OverNick\Support\AES;
  * Class ChuanglanDmClient
  * @package OverNick\Sms\Client
  */
-class ChuangLanDmClient extends SmsClientAbstract
+class DangLangDmClient extends SmsClientAbstract
 {
     /**
      * @var string
@@ -35,12 +35,10 @@ class ChuangLanDmClient extends SmsClientAbstract
         if((!isset($params['to']) ||
             !isset($params['tpl']) ||
             !isset($params['sign']) ||
-            !isset($params['params'])))
+            !isset($params['content'])))
         {
             throw new InvalidArgumentException("params is empty.");
         }
-
-        $params['params'] = $this->arrayToJson($params['params']);
 
         return $params;
     }

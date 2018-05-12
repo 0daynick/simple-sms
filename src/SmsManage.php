@@ -7,7 +7,7 @@
  */
 namespace OverNick\Sms;
 
-use OverNick\Sms\Client\ChuangLanDmClient;
+use OverNick\Sms\Client\DangLangDmClient;
 use OverNick\Sms\Config\Sms;
 use OverNick\Support\Arr;
 use OverNick\Sms\Client\AliyunDmClient;
@@ -56,7 +56,7 @@ class SmsManage extends Manager
     protected function createDangLangDriver()
     {
         return $this->resolveDriver(
-            ChuangLanDmClient::class,
+            DangLangDmClient::class,
             $this->getConfigure('drivers.'.Sms::DRIVER_DANGLANG)
         );
     }
