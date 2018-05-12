@@ -21,6 +21,8 @@ use OverNick\Support\AES;
  */
 class DangLangDmClient extends SmsClientAbstract
 {
+    protected $iv;
+
     /**
      * @var string
      */
@@ -55,21 +57,6 @@ class DangLangDmClient extends SmsClientAbstract
             'app_id' => $config['app_id'],
             'key' =>  $config['key']
         ];
-    }
-
-    /**
-     * 发送短信
-     *
-     * @param Config $params
-     * @return \OverNick\Sms\Config\ResultConfig
-     */
-    public function send(Config $params)
-    {
-        if(is_array($this->params['to'])){
-            return $this->sendMulti();
-        }else{
-            return $this->sendOnce();
-        }
     }
 
     /**
@@ -115,6 +102,7 @@ class DangLangDmClient extends SmsClientAbstract
                 'smscontent' => '【'.$this->params['sign'].'】'.$this->params['content']
             ]
         ];
+
         return $this->sendSms($smsData);
     }
 
@@ -124,10 +112,14 @@ class DangLangDmClient extends SmsClientAbstract
      */
     public function sendSms($smsData)
     {
+        $aes = new \OverNick\Sms\AES();
+        $aes->set_key($this->config['key']);
+        $aes->require_pkcs5();
+
         $post_data = [
             'appId' => $this->config['app_id'],
-            'sign' => AES::encrypt(time(), $this->config['key'],''),
-            'smsData' => AES::encrypt(json_encode($smsData),$this->config['key'],''),
+            'sign' => $aes->encrypt(time()),
+            'smsData' => $aes->encrypt(json_encode($smsData)),
         ];
 
         $result = $this->client->request('GET', $this->url, [
@@ -138,7 +130,10 @@ class DangLangDmClient extends SmsClientAbstract
         // 获取到页面返回值
         $rsp = json_decode($result->getBody()->getContents(), true);
 
-        $this->result->setOrigin($rsp);
+        $this->result
+            ->setOrigin($rsp)
+            ->setCode($rsp['code'])
+            ->setMessage($rsp['message']);
 
         if ($rsp['code'] === 'SUCCESS'){
             $this->result->setState(true);

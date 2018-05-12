@@ -31,7 +31,7 @@ return [
         'danglang' => [
             'driver' => 'danglang',
             'app_id' => 'appId',
-            'key' => 'Key',
+            'key' => 'key',
         ]
     ]
 ];
