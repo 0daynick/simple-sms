@@ -33,7 +33,6 @@ class DangLangDmClient extends SmsClientAbstract
     public function getParams(Config $params)
     {
         if((!isset($params['to']) ||
-            !isset($params['tpl']) ||
             !isset($params['sign']) ||
             !isset($params['content'])))
         {
