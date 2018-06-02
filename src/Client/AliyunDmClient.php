@@ -103,10 +103,7 @@ class AliyunDmClient extends SmsClientAbstract
             throw new InvalidArgumentException("Configure access_key_id or access_secret not found.");
         }
 
-        $this->config = [
-            'access_key_id' => $config['access_secret'],
-            'access_secret' =>  $config['access_secret']
-        ];
+        $this->config = $config;
     }
 
     /**
